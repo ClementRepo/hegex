@@ -7,13 +7,13 @@ import (
 
 func Test(t *testing.T) {
 	type args struct {
-		pattern string
-		s       string
-		rewrite string
+		pattern  string
+		s        string
+		template string
 	}
 	type want struct {
 		match bool
-		// if not set, rewrite should not be rewritten
+		// if empty, assert that template did not change after being rewritten
 		rewritten string
 	}
 	tests := []struct {
@@ -68,15 +68,20 @@ func Test(t *testing.T) {
 		{"b2", args{"/home/assets//.yml", "/home/assets//.yml", ""}, want{true, ""}},
 		{"b2", args{"/home/assets/*/.yml", "/home/assets//.yml", "/*"}, want{true, "/"}},
 		{"b2", args{"/home/assets/*/.yml", "/home/assets//.yml", "/home/assets/config.yml"}, want{true, "/home/assets/config.yml"}},
+
+		// example in README
+		// TODO fix the error
+		{"c1", args{"/*/**", "/path/data", "/*/to/**"}, want{true, "/path/to/data"}},
+		{"c2", args{"/path/*/api.{postfix[json|yml]}", "/path/doc/api.json", "{postfix}-*"}, want{true, "json-doc"}},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			compile := MustCompile(tt.args.pattern)
 			assert.Equal(t, tt.want.match, compile.MatchString(tt.args.s))
-			rewritten, match := compile.MatchAndRewrite(tt.args.s, tt.args.rewrite)
+			rewritten, match := compile.MatchAndRewrite(tt.args.s, tt.args.template)
 			assert.Equal(t, tt.want.match, match)
 			if tt.want.rewritten == "" {
-				assert.Equal(t, tt.args.rewrite, rewritten)
+				assert.Equal(t, tt.args.template, rewritten)
 			} else {
 				assert.Equal(t, tt.want.rewritten, rewritten)
 			}

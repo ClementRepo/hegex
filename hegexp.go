@@ -36,12 +36,15 @@ func MustCompile(str string) *Hegexp {
 }
 
 // MatchString reports whether the string s
-// contains any match of the regular expression re.
+// contains any match of the Hegexp.
 func (h *Hegexp) MatchString(s string) bool {
 	return h.re.MatchString(s)
 }
 
-func MatchString(pattern string, s string) (matched bool, err error) {
+// MatchString reports whether the string s
+// contains any match of the Hegexp.
+// return an error if pattern can't be compiled into a Hegexp
+func MatchString(pattern string, s string) (ok bool, err error) {
 	h, err := Compile(pattern)
 	if err != nil {
 		return false, err
@@ -54,7 +57,7 @@ func MatchString(pattern string, s string) (matched bool, err error) {
 // The key of map represents the (group) name of submatch
 // A return value of nil,false indicates pattern and s do not match
 // A return value of nil,true indicates pattern and s  match, but no submatch found
-func (h *Hegexp) MatchAndFindStringSubmatch(s string) (group map[string]string, match bool) {
+func (h *Hegexp) MatchAndFindStringSubmatch(s string) (group map[string]string, ok bool) {
 	submatches := h.re.FindStringSubmatch(s)
 	if len(submatches) == 0 {
 		return nil, false
@@ -73,17 +76,17 @@ func (h *Hegexp) MatchAndFindStringSubmatch(s string) (group map[string]string, 
 	return submatchMap, true
 }
 
-// MatchAndRewrite returns a new sting with {} and * replaced.
+// MatchAndRewrite returns a new string with {} and * replaced.
 // if pattern matches s, return rewritten,true
-// else return rewrite,false
-func (h *Hegexp) MatchAndRewrite(s string, template string) (rewritten string, match bool) {
+// else return rewritten,false
+func (h *Hegexp) MatchAndRewrite(s string, template string) (rewritten string, ok bool) {
 	group, match := h.MatchAndFindStringSubmatch(s)
 	if !match {
 		return template, false
 	}
 	rewritten = template
-	// group with longer name should be used applied to rewrite earlier
-	// this ensures ** in rewrite has higher priority in tempalte
+	// group with longer name should be used applied to template earlier
+	// this ensures ** in template has higher priority in tempalte
 	var keys []string
 	for k := range group {
 		keys = append(keys, k)
