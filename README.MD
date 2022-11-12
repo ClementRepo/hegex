@@ -19,49 +19,47 @@ of <a href="https://github.com/golang/go/blob/master/src/regexp/regexp.go" targe
   <a href="#license">License</a>
 </p>
 
-**Hegex** helps you write simple patterns to match HTTP host or HTTP path.
+**hegex** helps you write simple patterns to match hostnames or paths.
 
-Take a look at what **hegex** can do when matching a host:
+Take a look at what **hegex** can do when matching a hostname:
 
-| pattern for host                                            | match                                                                                |
+| Pattern for hostname                                            | Match                                                                                |
 |-------------------------------------------------------------|--------------------------------------------------------------------------------------|
-| `*.example.com`                                             | `string-01.example.com`,`string-01.string-02.example.com` and so on                  |
+| `*.example.com`                                             | `string-01.example.com`, `string-01.string-02.example.com`, and so on                  |
 | `{site}.example.com`                                        | `string-01.example.com`                                                              |
 | `{site[candidate01\|candidate02\|candidate03]}.example.com` | only `candidate01.example.com`, `candidate02.example.com`, `candidate03.example.com` |
 
-The same rules apply to path:
+The same rules apply to paths:
 
-| pattern for path                                                | match                                                                                         |
+| Pattern for path                                                | Match                                                                                         |
 |-----------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| `/path/*/api.json`                                              | `/path/string-01/api.json`,`/path/string-01/string-02/api.json` and so on                     |
+| `/path/*/api.json`                                              | `/path/string-01/api.json`, `/path/string-01/string-02/api.json`, and so on                     |
 | `/path/{middle}/api.json`                                       | `/path/string-01/api.json`                                                                    |
 | `/path/{middle[candidate01\|candidate02\|candidate03]/api.json` | only `/path/candidate01/api.json`, `/path/candidate02/api.json`, `/path/candidate03/api.json` |
 
-Q: What is the purpose of **hegex**?
+**Q: What is the purpose of hegex?**
 
-A: **Hegex** can be used to write API gateway rules. **Regex** may require a lot of mental effort to read when
-it comes to `[a-zA-Z0-9-]+\.example\.com`, which can be rewritten more intuitively as `{site}.example.com` by using *
-*hegex**.
+**A:** hegex can be used to write API gateway rules. Regular expressions (regex) may require a lot of mental effort to read when it comes to `[a-zA-Z0-9-]+\.example\.com`, which can be rewritten more intuitively as `{site}.example.com` using hegex.
 
-Though **hegex** brings simplicity, it is less flexible and has lower performance than **regex**.
+Though hegex brings simplicity, it is less flexible and has lower performance than regex.
 
-## NOTE: Hegex is not ready for production
+## NOTE: hegex is not ready for production
 
 ## Key features
 
-* Match hostname and HTTP path
-* `*`, `**` and `***`... are treated as different placeholder
-* `{}` placeholder support candidates
+* Match hostname and path
+* `*`, `**`, and `***` are treated as different placeholders
+* `{}` placeholder supports candidates
 
 ## How to use
 
-With [Go module](https://github.com/golang/go/wiki/Modules) support, simply add the following import
+With [Go module](https://github.com/golang/go/wiki/Modules) support, simply add the following import to your code:
 
-```
+```go
 import "github.com/ClementRepo/hegex"
 ```
 
-to your code, and then `go [build|run|test]` will automatically fetch the necessary dependencies.
+Then, `go [build|run|test]` will automatically fetch the necessary dependencies.
 
 Otherwise, run the following Go command to install the `hegex` package:
 
@@ -70,7 +68,9 @@ $ go get -u github.com/ClementRepo/hegex
 ```
 
 ### Code Example
-* match an HTTP host
+
+* Match a hostname
+
 ```go
 package main
 
@@ -88,7 +88,9 @@ func main() {
 	fmt.Println(ok) // true
 }
 ```
-* match an HTTP path
+
+* Match a path
+
 ```go
 package main
 
@@ -106,7 +108,9 @@ func main() {
 	fmt.Println(ok) // true
 }
 ```
-* match and rewrite an HTTP host
+
+* Match and rewrite a hostname
+
 ```go
 package main
 
@@ -120,12 +124,14 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	rewritten,ok := he.MatchAndRewrite("api.example.com", "example.com/*")
+	rewritten, ok := he.MatchAndRewrite("api.example.com", "example.com/*")
 	fmt.Println(ok) // true
 	fmt.Println(rewritten) // example.com/api
 }
 ```
-* match and rewrite an HTTP host
+
+* Match and rewrite a path
+
 ```go
 package main
 
@@ -142,7 +148,7 @@ func main() {
 	// Both * and ** match any string
 	// In the process of rewriting, hegex knows * points to "path" and ** points to "data"
 	// You can use longer repeated * in your code. For example: /***/image/*/**.jpg
-	rewritten,ok := he.MatchAndRewrite("/path/data", "/*/to/**")
+	rewritten, ok := he.MatchAndRewrite("/path/data", "/*/to/**")
 	fmt.Println(ok) // true
 	fmt.Println(rewritten) // /path/to/data
 }
@@ -155,12 +161,12 @@ For more examples, see [hegexp_test.go](hegexp_test.go)
 - [x] Multi-sterix placeholder
 - [x] Curly brace placeholder with candidates
 - [x] Replace placeholder with string
-- [] Benchmark and compare hegex with golang regexp
-- [] Support non-ASCII characters
+- [ ] Benchmark and compare hegex with golang regexp
+- [ ] Support non-ASCII characters
 
 ## Contact
 
-* <a href="mailto:github-contributing.ra2t5@simplelogin.com?subject=hegex Feedback"> Email </a>
+* [Email](mailto:github-contributing.ra2t5@simplelogin.com?subject=hegex%20Feedback)
 * Slack: [#hegex](https://clementrepo.slack.com/archives/C05G65BLYUA) channel
 
 ## Contributing
@@ -169,9 +175,9 @@ hegex is MIT licensed and accepts contributions via GitHub pull requests.
 
 ## Credits
 
-This software uses the following open source packages:
+This software uses the following open-source packages:
 
-- [testify](github.com/stretchr/testify)
+- [testify](https://github.com/stretchr/testify)
 
 ## License
 
