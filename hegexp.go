@@ -11,7 +11,7 @@ import (
 type Hegexp struct {
 	pattern                string
 	re                     *regexp.Regexp
-	as                     []asterix
+	as                     []asterisk
 	bs                     []cBrace
 	regexGroupToHegexGroup map[string]string
 }
@@ -162,22 +162,22 @@ func newHegex(pattern string) (*Hegexp, error) {
 	return &Hegexp{pattern, re, as, cbs, regexGroupToHegexGroup}, nil
 }
 
-const asterixGroupPrefix = "asterixgroup"
+const asteriskGroupPrefix = "asteriskgroup"
 
-type asterix struct {
+type asterisk struct {
 	start        int
 	endExclusive int
 }
 
-func (a asterix) len() int {
+func (a asterisk) len() int {
 	return a.endExclusive - a.start
 }
 
-func (a asterix) groupName() string {
-	return fmt.Sprintf("%s%d", asterixGroupPrefix, a.len())
+func (a asterisk) groupName() string {
+	return fmt.Sprintf("%s%d", asteriskGroupPrefix, a.len())
 }
 
-func (a asterix) groupRegex() string {
+func (a asterisk) groupRegex() string {
 	return fmt.Sprintf("(?P<%s>%s)", a.groupName(), ".*")
 }
 
@@ -203,15 +203,15 @@ func (cb cBrace) groupRegex() string {
 	}
 }
 
-func findAsterix(pattern string) []asterix {
-	var as []asterix
-	// find all asterix in expr
+func findAsterix(pattern string) []asterisk {
+	var as []asterisk
+	// find all asterisk in expr
 	for i := 0; i < len(pattern); i++ {
 		if pattern[i] == '*' {
 			j := i + 1
 			for ; j < len(pattern) && pattern[j] == '*'; j++ {
 			}
-			a := asterix{start: i, endExclusive: j}
+			a := asterisk{start: i, endExclusive: j}
 			as = append(as, a)
 			i = j + 1
 		}
