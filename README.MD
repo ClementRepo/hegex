@@ -23,23 +23,26 @@ of <a href="https://github.com/golang/go/blob/master/src/regexp/regexp.go" targe
 
 Take a look at what **hegex** can do when matching a hostname:
 
-| Pattern for hostname                                            | Match                                                                                |
-|-------------------------------------------------------------|--------------------------------------------------------------------------------------|
-| `*.example.com`                                             | `string-01.example.com`, `string-01.string-02.example.com`, and so on                  |
-| `{site}.example.com`                                        | `string-01.example.com`                                                              |
-| `{site[candidate01\|candidate02\|candidate03]}.example.com` | only `candidate01.example.com`, `candidate02.example.com`, `candidate03.example.com` |
+| Pattern for hostname             | Match                                                                 |
+|----------------------------------|-----------------------------------------------------------------------|
+| `*.example.com`                  | `string-01.example.com`, `string-01.string-02.example.com`, and so on |
+| `{site}.example.com`             | `string-01.example.com`                                               |
+| `{site[a\|bb\|ccc]}.example.com` | only `a.example.com`, `bb.example.com`, `ccc.example.com`             |
 
 The same rules apply to paths:
 
-| Pattern for path                                                | Match                                                                                         |
-|-----------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
-| `/path/*/api.json`                                              | `/path/string-01/api.json`, `/path/string-01/string-02/api.json`, and so on                     |
-| `/path/{middle}/api.json`                                       | `/path/string-01/api.json`                                                                    |
-| `/path/{middle[candidate01\|candidate02\|candidate03]/api.json` | only `/path/candidate01/api.json`, `/path/candidate02/api.json`, `/path/candidate03/api.json` |
+| Pattern for path                     | Match                                                                       |
+|--------------------------------------|-----------------------------------------------------------------------------|
+| `/path/*/api.json`                   | `/path/string-01/api.json`, `/path/string-01/string-02/api.json`, and so on |
+| `/path/{middle}/api.json`            | `/path/string-01/api.json`                                                  |
+| `/path/{middle[a\|bb\|ccc]/api.json` | only `/path/a/api.json`, `/path/bb/api.json`, `/path/ccc/api.json`          |
 
-**Q: What is the purpose of hegex?**
+**Q: Who should use hegex?**
 
-**A:** hegex can be used to write API gateway rules. Regular expressions (regex) may require a lot of mental effort to read when it comes to `[a-zA-Z0-9-]+\.example\.com`, which can be rewritten more intuitively as `{site}.example.com` using hegex.
+**A:** hegex can be used to write rules for an API gateway. Regular expressions (regex) may require a lot of mental
+effort to
+read when it comes to `[a-zA-Z0-9-]+\.example\.com`. By using hegex, the pattern be rewritten as `{site}.example.com`,
+which is more intuitive.
 
 Though hegex brings simplicity, it is less flexible and has lower performance than regex.
 
@@ -48,8 +51,8 @@ Though hegex brings simplicity, it is less flexible and has lower performance th
 ## Key features
 
 * Match hostname and path
-* `*`, `**`, and `***` are treated as different placeholders
-* `{}` placeholder supports candidates
+* `{}` supports candidates
+* Treat `*`, `**`, and `***` as different placeholders in the process of rewriting
 
 ## How to use
 
@@ -67,9 +70,10 @@ Otherwise, run the following Go command to install the `hegex` package:
 $ go get -u github.com/ClementRepo/hegex
 ```
 
-### Code Example
+We currently support the most recent major Go versions from 1.19 onward.
+### Examples
 
-* Match a hostname
+Match a hostname
 
 ```go
 package main
@@ -89,7 +93,7 @@ func main() {
 }
 ```
 
-* Match a path
+Match a path
 
 ```go
 package main
@@ -109,7 +113,7 @@ func main() {
 }
 ```
 
-* Match and rewrite a hostname
+Match and rewrite a hostname
 
 ```go
 package main
@@ -125,12 +129,12 @@ func main() {
 		panic(err)
 	}
 	rewritten, ok := he.MatchAndRewrite("api.example.com", "example.com/*")
-	fmt.Println(ok) // true
+	fmt.Println(ok)        // true
 	fmt.Println(rewritten) // example.com/api
 }
 ```
 
-* Match and rewrite a path
+Match and rewrite a path
 
 ```go
 package main
@@ -149,7 +153,7 @@ func main() {
 	// In the process of rewriting, hegex knows * points to "path" and ** points to "data"
 	// You can use longer repeated * in your code. For example: /***/image/*/**.jpg
 	rewritten, ok := he.MatchAndRewrite("/path/data", "/*/to/**")
-	fmt.Println(ok) // true
+	fmt.Println(ok)        // true
 	fmt.Println(rewritten) // /path/to/data
 }
 ```
@@ -158,7 +162,7 @@ For more examples, see [hegexp_test.go](hegexp_test.go)
 
 ## Roadmap
 
-- [x] Multi-sterix placeholder
+- [x] Multi-asterisk placeholder
 - [x] Curly brace placeholder with candidates
 - [x] Replace placeholder with string
 - [ ] Benchmark and compare hegex with golang regexp
