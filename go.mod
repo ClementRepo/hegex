@@ -1,4 +1,4 @@
-module clementrepo/hegex/v1
+module github.com/proxfly/hegex
 
 go 1.19
 
