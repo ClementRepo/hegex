@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <img src="https://socialify.git.ci/ClementRepo/hegex/image?font=Inter&language=1&name=1&owner=1&pattern=Circuit%20Board&theme=Light" alt="Markdownify" width="500">
+  <img src="https://socialify.git.ci/proxfly/hegex/image?font=Inter&language=1&name=1&owner=1&pattern=Circuit%20Board&theme=Light" alt="Markdownify" width="500">
   <br>
   hegex
   <br>
@@ -59,7 +59,7 @@ Though hegex brings simplicity, it is less flexible and has lower performance th
 With [Go module](https://github.com/golang/go/wiki/Modules) support, simply add the following import to your code:
 
 ```go
-import "github.com/ClementRepo/hegex"
+import "github.com/proxfly/hegex"
 ```
 
 Then, `go [build|run|test]` will automatically fetch the necessary dependencies.
@@ -67,7 +67,7 @@ Then, `go [build|run|test]` will automatically fetch the necessary dependencies.
 Otherwise, run the following Go command to install the `hegex` package:
 
 ```sh
-$ go get -u github.com/ClementRepo/hegex
+$ go get -u github.com/proxfly/hegex
 ```
 
 We currently support the most recent major Go versions from 1.19 onward.
@@ -80,7 +80,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/ClementRepo/hegex"
+	"github.com/proxfly/hegex"
 )
 
 func main() {
@@ -100,7 +100,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/ClementRepo/hegex"
+	"github.com/proxfly/hegex"
 )
 
 func main() {
@@ -120,7 +120,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/ClementRepo/hegex"
+	"github.com/proxfly/hegex"
 )
 
 func main() {
@@ -141,7 +141,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/ClementRepo/hegex"
+	"github.com/proxfly/hegex"
 )
 
 func main() {
