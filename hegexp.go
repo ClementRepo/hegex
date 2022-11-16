@@ -86,7 +86,7 @@ func (h *Hegexp) MatchAndRewrite(s string, template string) (rewritten string, o
 	}
 	rewritten = template
 	// group with longer name should be used applied to template earlier
-	// this ensures ** in template has higher priority in tempalte
+	// this ensures ** in template has higher priority in template
 	var keys []string
 	for k := range group {
 		keys = append(keys, k)
@@ -97,7 +97,7 @@ func (h *Hegexp) MatchAndRewrite(s string, template string) (rewritten string, o
 
 	for _, k := range keys {
 		v := group[k]
-		if strings.Count(k, "*") != len(k) {
+		if len(k) == 0 || strings.Count(k, "*") != len(k) {
 			// if group name relates to curly brace
 			k = fmt.Sprintf("{%s}", k)
 		}
@@ -153,16 +153,17 @@ func newHegex(pattern string) (*Hegexp, error) {
 
 	regexGroupToHegexGroup := map[string]string{}
 	for _, a := range as {
-		regexGroupToHegexGroup[a.groupName()] = strings.Repeat("*", a.len())
+		regexGroupToHegexGroup[a.regexGroupName()] = strings.Repeat("*", a.len())
 	}
 	for _, cb := range cbs {
-		regexGroupToHegexGroup[cb.groupName] = cb.groupName
+		regexGroupToHegexGroup[cb.regexGroupName()] = cb.hegexGroupName
 	}
 
 	return &Hegexp{pattern, re, as, cbs, regexGroupToHegexGroup}, nil
 }
 
 const asteriskGroupPrefix = "asteriskgroup"
+const emptyGroupName = "hegexEmptyGroupName"
 
 type asterisk struct {
 	start        int
@@ -173,19 +174,19 @@ func (a asterisk) len() int {
 	return a.endExclusive - a.start
 }
 
-func (a asterisk) groupName() string {
+func (a asterisk) regexGroupName() string {
 	return fmt.Sprintf("%s%d", asteriskGroupPrefix, a.len())
 }
 
 func (a asterisk) groupRegex() string {
-	return fmt.Sprintf("(?P<%s>%s)", a.groupName(), ".*")
+	return fmt.Sprintf("(?P<%s>%s)", a.regexGroupName(), ".*")
 }
 
 type cBrace struct {
-	start        int
-	endExclusive int
-	groupName    string
-	candidate    []string
+	start          int
+	endExclusive   int
+	hegexGroupName string
+	candidate      []string
 }
 
 func (cb cBrace) Less(bb cBrace) bool {
@@ -196,11 +197,18 @@ func (cb cBrace) groupRegex() string {
 	if len(cb.candidate) == 0 {
 		// this has a drawback that /{path}/subpath cannot match "/a.txt/subpath"
 		// but I'm not going to fix it now
-		return fmt.Sprintf("(?P<%s>%s)", cb.groupName, "[^\\s\\./]+")
+		return fmt.Sprintf("(?P<%s>%s)", cb.regexGroupName(), "[^\\s\\./]+")
 	} else {
 		join := strings.Join(cb.candidate, "|")
-		return fmt.Sprintf("(?P<%s>%s)", cb.groupName, join)
+		return fmt.Sprintf("(?P<%s>%s)", cb.regexGroupName(), join)
 	}
+}
+
+func (cb cBrace) regexGroupName() string {
+	if cb.hegexGroupName == "" {
+		return emptyGroupName
+	}
+	return cb.hegexGroupName
 }
 
 func findAsterix(pattern string) []asterisk {
@@ -213,13 +221,13 @@ func findAsterix(pattern string) []asterisk {
 			}
 			a := asterisk{start: i, endExclusive: j}
 			as = append(as, a)
-			i = j + 1
+			i = j
 		}
 	}
 	return as
 }
 
-const cBraceFormatRegex = `{[A-Za-z0-9-]+(\[([A-Za-z0-9-]+\|)*[A-Za-z0-9-]+\])?}`
+const cBraceFormatRegex = `{[A-Za-z0-9-]*(\[([A-Za-z0-9-]+\|)*[A-Za-z0-9-]+\])?}`
 
 func findCBrace(pattern string) ([]cBrace, error) {
 	var cbs []cBrace
@@ -263,17 +271,17 @@ func findCBrace(pattern string) ([]cBrace, error) {
 			return nil, &Error{err.Error(), pattern}
 		}
 		if !ok {
-			return nil, &Error{"bad format", pattern}
+			return nil, &Error{"bad format, didn't match " + cBraceFormatRegex, pattern}
 		}
 
 		if strings.Contains(content, "[") {
 			// extract candidate
 			sp := strings.Split(content, "[")
-			cbs[i].groupName = sp[0]
+			cbs[i].hegexGroupName = sp[0]
 			cand := strings.TrimSuffix(sp[1], "]")
 			cbs[i].candidate = strings.Split(cand, "|")
 		} else {
-			cbs[i].groupName = content
+			cbs[i].hegexGroupName = content
 		}
 	}
 	return cbs, nil

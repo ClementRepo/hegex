@@ -30,6 +30,7 @@ func Test(t *testing.T) {
 		{"3", args{"{site[x|y]}.example.com", "x.example.com", "/my-{site}"}, want{true, "/my-x"}},
 		{"3.1", args{"{site[xxa|yya|abc]}.example.com", "abc.example.com", "/my-{site}"}, want{true, "/my-abc"}},
 		{"4", args{"{site[x|y]}.example.com", "b.example.com", "/my-{site}"}, want{false, ""}},
+		{"4", args{"{}.example.com", "xy.example.com", "/{}z"}, want{true, "/xyz"}},
 		{"5", args{"*.example.com", ".example.com", "/my-*"}, want{true, "/my-"}},
 		{"6", args{"*.example.com", ".example.com", "/my-*-*"}, want{true, "/my--"}},
 		{"7", args{"*.example.com", "abc.example.com", "/my-*"}, want{true, "/my-abc"}},
@@ -70,8 +71,11 @@ func Test(t *testing.T) {
 		{"b2", args{"/home/assets/*/.yml", "/home/assets//.yml", "/home/assets/config.yml"}, want{true, "/home/assets/config.yml"}},
 
 		// example in README
-		// TODO fix the error
 		{"c1", args{"/*/**", "/path/data", "/*/to/**"}, want{true, "/path/to/data"}},
+		{"c1", args{"/*/**", "/path/to/data", "/*/to/**"}, want{true, "/path/to/to/data"}},
+		{"c1", args{"/***/abc/*/**def", "/s03/abc/s01/s02def", "/*/to/**/***"}, want{true, "/s01/to/s02/s03"}},
+		{"c1", args{"/***/a", "/a", ""}, want{false, ""}},
+		{"c1", args{"/***/a", "//a", ""}, want{true, ""}},
 		{"c2", args{"/path/*/api.{postfix[json|yml]}", "/path/doc/api.json", "{postfix}-*"}, want{true, "json-doc"}},
 	}
 	for _, tt := range tests {
