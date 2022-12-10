@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func Test(t *testing.T) {
+func TestHegex(t *testing.T) {
 	type args struct {
 		pattern  string
 		s        string

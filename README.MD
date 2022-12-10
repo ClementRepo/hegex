@@ -12,6 +12,7 @@ of <a href="https://github.com/golang/go/blob/master/src/regexp/regexp.go" targe
 <p align="center">
   <a href="#key-features">Key features</a> •
   <a href="#how-to-use">How to use</a> •
+  <a href="#benchmark">Benchmark</a> •
   <a href="#roadmap">Roadmap</a> •
   <a href="#contact">Contact</a> •
   <a href="#contributing">Contributing</a> •
@@ -71,6 +72,7 @@ $ go get -u github.com/proxfly/hegex
 ```
 
 We currently support the most recent major Go versions from 1.19 onward.
+
 ### Examples
 
 Match a hostname
@@ -160,12 +162,26 @@ func main() {
 
 For more examples, see [hegexp_test.go](hegexp_test.go)
 
+## Benchmark
+
+[See benchmark details](BENCHMARKS.MD)
+
+| Benchmark     |         1 CPU |        8 CPUs |
+|---------------|--------------:|--------------:|
+| Simple/regex  | 3704464 ns/op | 3859987 ns/op |
+| Simple/hegex  | 3892382 ns/op | 3778665 ns/op |
+| Complex/regex |  616395 ns/op |  603943 ns/op |
+| Complex/hegex | 1371399 ns/op | 1384042 ns/op |
+
+The benchmark results clearly show that as the patterns get longer and more complex, hegex's performance drops off
+noticeably compared to regex.
+
 ## Roadmap
 
 - [x] Multi-asterisk placeholder
 - [x] Curly brace placeholder with candidates
 - [x] Replace placeholder with string
-- [ ] Benchmark and compare hegex with golang regexp
+- [x] Benchmark and compare hegex with golang regexp
 - [ ] Support non-ASCII characters
 
 ## Contact
