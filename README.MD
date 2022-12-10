@@ -171,7 +171,7 @@ For more examples, see [hegexp_test.go](hegexp_test.go)
 ## Contact
 
 * [Email](mailto:github-contributing.ra2t5@simplelogin.com?subject=hegex%20Feedback)
-* Slack: [#hegex](https://clementrepo.slack.com/archives/C05G65BLYUA) channel
+* Slack: [#hegex](https://proxfly.slack.com/archives/C05G65BLYUA) channel
 
 ## Contributing
 
