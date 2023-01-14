@@ -140,7 +140,7 @@ func main() {
 }
 ```
 
-Match and rewrite a path
+Match and substitute a path
 
 ```go
 package main
