@@ -7,14 +7,13 @@ import (
 
 func TestHegex(t *testing.T) {
 	type args struct {
-		pattern  string
-		s        string
-		template string
+		expression string
+		s          string
+		template   string
 	}
 	type want struct {
-		match bool
-		// if empty, assert that template did not change after being rewritten
-		rewritten string
+		matched     bool
+		substituted string
 	}
 	tests := []struct {
 		name string
@@ -80,14 +79,14 @@ func TestHegex(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			compile := MustCompile(tt.args.pattern)
-			assert.Equal(t, tt.want.match, compile.MatchString(tt.args.s))
-			rewritten, match := compile.MatchAndRewrite(tt.args.s, tt.args.template)
-			assert.Equal(t, tt.want.match, match)
-			if tt.want.rewritten == "" {
-				assert.Equal(t, tt.args.template, rewritten)
+			compile := MustCompile(tt.args.expression)
+			assert.Equal(t, tt.want.matched, compile.MatchString(tt.args.s))
+			substituted, ok := compile.MatchAndSubstitute(tt.args.s, tt.args.template)
+			assert.Equal(t, tt.want.matched, ok)
+			if ok {
+				assert.Equal(t, tt.want.substituted, substituted)
 			} else {
-				assert.Equal(t, tt.want.rewritten, rewritten)
+				assert.Empty(t, substituted)
 			}
 		})
 	}
