@@ -1,4 +1,4 @@
-module github.com/proxfly/hegex
+module github.com/proxoar/hegex
 
 go 1.19
 

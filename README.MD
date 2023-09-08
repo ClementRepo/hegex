@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <img src="https://socialify.git.ci/proxfly/hegex/image?font=Inter&language=1&name=1&owner=1&pattern=Circuit%20Board&theme=Light" alt="Markdownify" width="500">
+  <img src="https://socialify.git.ci/proxoar/hegex/image?font=Inter&language=1&name=1&owner=1&pattern=Circuit%20Board&theme=Light" alt="Markdownify" width="500">
   <br>
   hegex
   <br>
@@ -64,7 +64,7 @@ Despite making things simpler, hegex doesn't match the versatility and efficienc
 With [Go module](https://github.com/golang/go/wiki/Modules) support, simply add the following import to your code:
 
 ```go
-import "github.com/proxfly/hegex"
+import "github.com/proxoar/hegex"
 ```
 
 Then, `go [build|run|test]` will automatically fetch the necessary dependencies.
@@ -72,7 +72,7 @@ Then, `go [build|run|test]` will automatically fetch the necessary dependencies.
 Otherwise, run the following Go command to install the `hegex` package:
 
 ```sh
-$ go get -u github.com/proxfly/hegex
+$ go get -u github.com/proxoar/hegex
 ```
 
 We currently support the most recent major Go versions from 1.19 onward.
@@ -86,7 +86,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/proxfly/hegex"
+	"github.com/proxoar/hegex"
 )
 
 func main() {
@@ -106,7 +106,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/proxfly/hegex"
+	"github.com/proxoar/hegex"
 )
 
 func main() {
@@ -126,7 +126,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/proxfly/hegex"
+	"github.com/proxoar/hegex"
 )
 
 func main() {
@@ -147,7 +147,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/proxfly/hegex"
+	"github.com/proxoar/hegex"
 )
 
 func main() {
@@ -193,7 +193,7 @@ noticeably compared to regex.
 ## Contact
 
 * [Email](mailto:github-contributing.ra2t5@simplelogin.com?subject=hegex%20Feedback)
-* Slack: [#hegex](https://proxfly.slack.com/archives/C05G65BLYUA) channel
+* Slack: [#hegex](https://proxoar.slack.com/archives/C05RCA84LNS) channel
 
 ## Contributing
 
