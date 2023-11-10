@@ -1,3 +1,5 @@
+## The ownership of hegex has shifted. For updates, head to [proxoar/hegex](https://github.com/proxoar/hegex).
+
 <h1 align="center">
   <br>
   <img src="https://socialify.git.ci/proxoar/hegex/image?font=Inter&language=1&name=1&owner=1&pattern=Circuit%20Board&theme=Light" alt="Markdownify" width="500">
